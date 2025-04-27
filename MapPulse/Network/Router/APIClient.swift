@@ -2,19 +2,20 @@
 //  APIClient.swift
 //  MapPulse
 //
-//  Created by Rachit Prajapati on 4/23/25.
+//  Created by Rachit Prajapati on 4/25/25.
 //
 
 import Foundation
 
-
+// A simple protocol defining our “fetch devices” capability,
 protocol APIClientType {
+    // Fetches the latest list of devices from the OneStepGPS API
     func fetchLatestDevices() async throws -> [Device]
 }
 
+// The real network client that reaches out over HTTP to fetch devices
 final class APIClient: APIClientType {
-    
-    
+    // Network transport
     private let transport: NetworkTransport
     
     // Dependecy injection
@@ -22,48 +23,46 @@ final class APIClient: APIClientType {
         self.transport = transport
     }
     
-    // Inherited method implementation
+    // Fetch the JSON from the API, validate, decode, and return Device models
     func fetchLatestDevices() async throws -> [Device] {
-        
-        // Router Endpoint
+        // 1. Build our endpoint and URLRequest
         let endpoint = OneStepGPSEndpoint.latestDevices
-        
-        // API request
         let apiRequest = APIRequest(endpoint: endpoint)
-        
-        // URL Request
         let urlRequest = try apiRequest.asURLRequest()
         
+        // 2. Perform the network call (Data + HTTP metadata)
         let (data, http) = try await transport.perform(request: urlRequest)
         
-        // error handling
+        // 3. Ensure status code is 2xx, else bubble up an error
         guard (200...299).contains(http.statusCode) else {
             throw APIError.invalidStatus(code: http.statusCode)
         }
         
-        // JSON Decoding
+        // 4. JSON Decoding
         let decoder = JSONDecoder.iso8601
         let response = try decoder.decode(DeviceListResponse.self, from: data)
+        
+        // 5. Return the array of Device objects
         return response.result_list
     }
 }
+// MARK: - Custom JSONDecoder Extension
 
-// Custom decoder for handling ISO8601 date formatting
 extension JSONDecoder {
     
-    // Computed property to enhance decoder
+    // A JSONDecoder preconfigured to parse ISO8601 dates, with fractional-seconds support and a fallback
     static var iso8601: JSONDecoder {
         let decoder = JSONDecoder()
         
-        // Default date formatter
+        // Formatter that handles full Internet date-time + fractional seconds
         let fullFormatter = ISO8601DateFormatter()
         fullFormatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
 
-        // Fallback date formatter
+        // Simpler formatter without fractional seconds
         let fallbackFormatter = ISO8601DateFormatter()
         fallbackFormatter.formatOptions = [.withInternetDateTime]
 
-        // JSON Decoding strategy
+        // Custom strategy: try fullFormatter, then fallback, else throw
         decoder.dateDecodingStrategy = .custom { decoder throws -> Date in
             
             let container = try decoder.singleValueContainer()
@@ -83,7 +82,6 @@ extension JSONDecoder {
             }
         }
 
-        // Return custom decoder
         return decoder
     }
 }

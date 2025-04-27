@@ -1,16 +1,15 @@
-////
-////  SearchBarView.swift
-////  MapPulse
-////
-////  Created by Rachit Prajapati on 4/25/25.
-////
-//
+///
+///  SearchBarView.swift
+///  MapPulse
+///
+///  Created by Rachit Prajapati on 4/25/25.
+///
+
 import SwiftUI
-//
-///*
-// Reusable Glassmorphic Search bar SwiftUI view
-//*/
-//
+
+/*
+ Reusable Glassmorphic Search bar SwiftUI view
+ */
 
 struct SearchBarView: View {
     @Binding var searchText: String // Two way binding property between Search bar and main MapView for text
@@ -41,35 +40,33 @@ struct SearchBarView: View {
                             onCommit()
                         })
                         .keyboardType(.asciiCapable)
-                            .autocorrectionDisabled()
-                            .autocapitalization(.none)
-                            .focused($isSearchFocused)
-                            .submitLabel(.search)
-                            .onSubmit { isSearchFocused = false }
-                            .opacity(isSearchExpanded ? 1 : 0)
-                            .frame(maxWidth: isSearchExpanded ? .infinity : 0)
+                        .autocorrectionDisabled()
+                        .autocapitalization(.none)
+                        .focused($isSearchFocused)
+                        .submitLabel(.search)
+                        .onSubmit { isSearchFocused = false }
+                        .opacity(isSearchExpanded ? 1 : 0)
+                        .frame(maxWidth: isSearchExpanded ? .infinity : 0)
                     }
                 }
                 .padding(.horizontal, 12)
             }
             // Animate the width from 44 → 300
             .frame(width: isSearchExpanded ? 300 : 44)
-            .animation(.spring(response: 0.4, dampingFraction: 0.5), value: isSearchExpanded)
+            .animation(
+                .spring(response: 0.4, dampingFraction: 0.5),
+                value: isSearchExpanded
+            )
             .shadow(radius: 4)
             .onTapGesture {
                 isSearchExpanded.toggle()
                 if !isSearchExpanded {
                     // focus the field after the spring
-//                    DispatchQueue.main.async {
-//                        isSearchFocused = true
-                    isSearchFocused = false
-                    searchText = ""
-//                    }
+                    DispatchQueue.main.async {
+                        isSearchFocused = false
+                        searchText = ""
+                    }
                 }
-//                else {
-//                    isSearchFocused = false
-//                    searchText = ""
-//                }
             }
             
             Spacer()
@@ -81,5 +78,9 @@ struct SearchBarView: View {
 
 #Preview {
     @Previewable @State var isSearchExpanded: Bool = false
-    SearchBarView(searchText: .constant(""), isSearchExpanded: $isSearchExpanded , onCommit: { isSearchExpanded.toggle() })
+    SearchBarView(
+        searchText: .constant(""),
+        isSearchExpanded: $isSearchExpanded ,
+        onCommit: { isSearchExpanded.toggle()
+        })
 }

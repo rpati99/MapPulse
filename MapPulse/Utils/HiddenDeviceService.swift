@@ -1,5 +1,5 @@
 //
-//  HiddenDevicesService.swift
+//  HiddenDeviceService.swift
 //  MapPulse
 //
 //  Created by Rachit Prajapati on 4/24/25.

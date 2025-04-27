@@ -7,7 +7,7 @@
 
 import Foundation
 
-// Type safe error handling in Networ layer
+// Type safe error handling in Network layer
 enum APIError: Error {
     case invalidStatus(code: Int)
     case decodingError(Error)

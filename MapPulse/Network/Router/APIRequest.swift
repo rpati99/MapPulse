@@ -2,38 +2,40 @@
 //  APIRequest.swift
 //  MapPulse
 //
-//  Created by Rachit Prajapati on 4/23/25.
+//  Created by Rachit Prajapati on 4/25/25.
 //
 
 import Foundation
-// MARK: - APIRequest Builds the url for api from above and makes request
 
-// Sits between Router and transport layer
+/*
+ A simple builder that turns our endpoint definitions into a real URLRequest,
+    handling paths, query parameters, and headers in one place
+ */
 struct APIRequest {
-    // Router endpoint
+    // The endpoint enum knows its baseURL, path, query items, and headers
     let endpoint: OneStepGPSEndpoint
     
-    
+    // Convert the endpoint into a fully configured URLRequest
+    // Throws if we can’t form a valid URL
     func asURLRequest() throws -> URLRequest {
-        // make url components
+        // 1) Start with the base URL and append the endpoint’s path
         var components = URLComponents(url: endpoint.baseURL.appendingPathComponent(endpoint.path), resolvingAgainstBaseURL: false)
         
-        // add query items
+        // 2) If this endpoint has any query parameters, add them now
         if !endpoint.queryItems.isEmpty {
             components?.queryItems = endpoint.queryItems
         }
-        
-        // error handling
+        // 3) Make sure we ended up with a valid URL
         guard let url = components?.url else {
             throw URLError(.badURL)
         }
        
-        // make url request
+        // 4) Build the URLRequest, set HTTP method, and apply headers
         var request = URLRequest(url: url)
         request.httpMethod = endpoint.method.rawValue
+        // 5) Attach any custom headers (e.g. "Accept: application/json")
         endpoint.headers.forEach { request.addValue($1, forHTTPHeaderField: $0) }
         
-        // return the created request
         return request
     }
     
