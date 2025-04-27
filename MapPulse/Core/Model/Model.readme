@@ -1,0 +1,9 @@
+Refer this ordered file representation for brief structure of code flow, Model Layer
+
+• Model
+    1. DeviceListResponse.swift (Returns the list of devices)
+    2. Device.swift (Object representing a device)
+    3. DevicePoint.swift (Object representing latest_device_point key under Device)
+    4. DeviceState.swift (Object representing device_state key under DevicePoint)
+    5. BatteryInfo,swift (Object representing params key under DevicePoint)
+    6. StatusDuration.swift (Object representing drive_status_duration, drive_status_distance under DeviceState)
