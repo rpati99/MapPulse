@@ -54,14 +54,9 @@ MapPulse is an iOS SwiftUI application which fetches live GPS device data from t
 
 ---
 
-## 🎥 Demo GIFs
+## 🎥 App Preview (full working of app found as App_Demo.mp4 under AppGIFs directory)
 
-1. **Search & Carousel**  
-   ![Expanding Search & Carousel](./gifs/search-and-carousel.gif)  
-2. **Hide/Unhide Context Menu**  
-   ![Hide/Unhide Devices](./gifs/hide-unhide.gif)  
-
-*(Place your recorded GIFs in `Resources/GIFs/` with matching names.)*
+<img src="AppGIFs/Drive_Status.gif" width="150"/><img src="AppGIFs/Real_time_update.gif" width="150"/><img src="AppGIFs/Search_Carousel.gif" width="150"/><img src="AppGIFs/Speed.gif" width="150"/>
 
 ---
 
